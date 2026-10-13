@@ -1,0 +1,49 @@
+from collections import deque
+
+start = (1, 2, 3,
+         4, 0, 6,
+         7, 5, 8)
+
+goal = (1, 2, 3,
+        4, 5, 6,
+        7, 8, 0)
+
+def solve(start, goal):
+    queue = deque([(start, [])])
+    visited = {start}
+
+    while queue:
+        state, path = queue.popleft()
+        path = path + [state]
+
+        if state == goal:
+            return path
+
+        zero = state.index(0)
+        r, c = divmod(zero, 3)
+
+        for dr, dc in [(1, 0), (-1, 0),
+                       (0, 1), (0, -1)]:
+            nr, nc = r + dr, c + dc
+
+            if 0 <= nr < 3 and 0 <= nc < 3:
+                pos = nr * 3 + nc
+                new = list(state)
+                new[zero], new[pos] = new[pos], new[zero]
+                new = tuple(new)
+
+                if new not in visited:
+                    visited.add(new)
+                    queue.append((new, path))
+
+    return None
+
+path = solve(start, goal)
+
+if path:
+    for step in path:
+        for i in range(0, 9, 3):
+            print(step[i:i+3])
+        print()
+else:
+    print("No solution found")
