@@ -1,0 +1,23 @@
+rooms = {
+    'A': 'Dirty',
+    'B': 'Dirty'
+}
+
+location = 'A'
+
+while True:
+    print("Vacuum at room", location)
+
+    if rooms[location] == 'Dirty':
+        rooms[location] = 'Clean'
+        print("Room", location, "cleaned")
+
+    if location == 'A':
+        location = 'B'
+    else:
+        location = 'A'
+
+    if all(status == 'Clean'
+           for status in rooms.values()):
+        print("All rooms are clean")
+        break
