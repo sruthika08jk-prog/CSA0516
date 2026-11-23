@@ -1,0 +1,34 @@
+
+% Medical Diagnosis System
+
+% Disease and symptoms
+disease(fever, [high_temperature, headache, body_pain]).
+disease(cold, [sneezing, cough, runny_nose]).
+disease(malaria, [fever, chills, sweating]).
+disease(flu, [fever, cough, headache, body_pain]).
+
+% Check symptoms
+member_symptom(X, [X|_]).
+member_symptom(X, [_|T]) :-
+    member_symptom(X, T).
+
+% Diagnosis rule
+diagnose(Disease, Symptoms) :-
+    disease(Disease, Required),
+    check_symptoms(Required, Symptoms).
+
+check_symptoms([], _).
+check_symptoms([H|T], Symptoms) :-
+    member_symptom(H, Symptoms),
+    check_symptoms(T, Symptoms).
+
+% Main program
+main :-
+    write('Enter symptoms as a list: '),
+    read(Symptoms),
+    (diagnose(Disease, Symptoms) ->
+        write('Possible Disease: '),
+        write(Disease), nl
+    ;
+        write('No matching disease found.'), nl
+    ).
