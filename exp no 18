@@ -1,0 +1,15 @@
+
+% Database facts
+student_teacher('Arun', 'Ravi', 'CS101').
+student_teacher('Bala', 'Kumar', 'CS102').
+student_teacher('Divya', 'Priya', 'CS103').
+student_teacher('Kavin', 'Anitha', 'CS104').
+
+% Display all records
+display :-
+    student_teacher(Student, Teacher, SubCode),
+    write('Student: '), write(Student),
+    write(', Teacher: '), write(Teacher),
+    write(', Subject Code: '), write(SubCode), nl,
+    fail.
+display.
