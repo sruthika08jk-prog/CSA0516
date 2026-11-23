@@ -1,0 +1,17 @@
+
+from sklearn.neighbors import KNeighborsClassifier
+
+# Training dataset
+X = [[1, 2], [2, 3], [3, 4], [6, 7], [7, 8], [8, 9]]
+y = [0, 0, 0, 1, 1, 1]
+
+# Create KNN model
+model = KNeighborsClassifier(n_neighbors=3)
+
+# Train the model
+model.fit(X, y)
+
+# Predict new data
+prediction = model.predict([[5, 6]])
+
+print("Predicted Class:", prediction[0])
