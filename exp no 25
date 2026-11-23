@@ -1,0 +1,24 @@
+
+% Diet suggestions based on disease
+
+diet(diabetes, 'Low sugar foods, vegetables and whole grains').
+diet(obesity, 'Low calorie foods, fruits and vegetables').
+diet(anemia, 'Iron rich foods like spinach and beans').
+diet(hypertension, 'Low salt foods, fruits and vegetables').
+diet(heart_disease, 'Low fat foods, whole grains and fruits').
+
+% Rule to suggest diet
+suggest_diet(Disease) :-
+    diet(Disease, Food),
+    write('Disease: '), write(Disease), nl,
+    write('Suggested Diet: '), write(Food), nl.
+
+suggest_diet(Disease) :-
+    \+ diet(Disease, _),
+    write('No diet information available.').
+
+% Main program
+main :-
+    write('Enter disease: '),
+    read(Disease),
+    suggest_diet(Disease).
