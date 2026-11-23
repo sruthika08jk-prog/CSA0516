@@ -1,0 +1,44 @@
+
+% Monkey Banana Problem
+
+% Initial state: monkey at door, box at window,
+% banana hanging at middle.
+
+% Monkey moves to the box
+move(state(at_door, on_floor, at_window, has_not), 
+     state(at_window, on_floor, at_window, has_not)).
+
+% Monkey pushes the box to the middle
+move(state(at_window, on_floor, at_window, has_not),
+     state(at_middle, on_floor, at_middle, has_not)).
+
+% Monkey climbs the box
+move(state(at_middle, on_floor, at_middle, has_not),
+     state(at_middle, on_box, at_middle, has_not)).
+
+% Monkey grabs the banana
+move(state(at_middle, on_box, at_middle, has_not),
+     state(at_middle, on_box, at_middle, has)).
+
+% Goal checking
+goal(state(_, _, _, has)).
+
+% Solve the problem
+solve(State, [State]) :-
+    goal(State).
+
+solve(State, [State|Path]) :-
+    move(State, NextState),
+    solve(NextState, Path).
+
+% Main predicate
+main :-
+    Initial = state(at_door, on_floor, at_window, has_not),
+    solve(Initial, Path),
+    write('Solution Path:'), nl,
+    display(Path).
+
+display([]).
+display([H|T]) :-
+    write(H), nl,
+    display(T).
