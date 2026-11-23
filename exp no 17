@@ -1,0 +1,14 @@
+
+% Database facts
+person('Arun', '2002-05-10').
+person('Bala', '2003-08-15').
+person('Divya', '2001-12-20').
+person('Kumar', '2002-03-25').
+
+% Display all records
+display :-
+    person(Name, DOB),
+    write('Name: '), write(Name),
+    write(', DOB: '), write(DOB), nl,
+    fail.
+display.
