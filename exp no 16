@@ -1,0 +1,20 @@
+
+% Base condition
+sum(0, 0).
+
+% Recursive rule
+sum(N, S) :-
+    N > 0,
+    N1 is N - 1,
+    sum(N1, S1),
+    S is N + S1.
+
+% Main predicate
+main :-
+    write('Enter a number: '),
+    read(N),
+    sum(N, S),
+    write('Sum of integers from 1 to '),
+    write(N),
+    write(' is: '),
+    write(S).
