@@ -1,0 +1,43 @@
+
+% Graph connections
+edge(a, b).
+edge(a, c).
+edge(b, d).
+edge(b, e).
+edge(c, f).
+edge(d, g).
+edge(e, g).
+edge(f, g).
+
+% Heuristic values
+h(a, 6).
+h(b, 4).
+h(c, 3).
+h(d, 2).
+h(e, 1).
+h(f, 2).
+h(g, 0).
+
+% Best First Search
+best_first(Start, Goal, Path) :-
+    search([[Start]], Goal, ReversePath),
+    reverse(ReversePath, Path).
+
+search([[Goal|Rest]|_], Goal, [Goal|Rest]).
+
+search([ [Node|Rest] | Others], Goal, Path) :-
+    findall([Next,Node|Rest],
+        (edge(Node, Next), \+ member(Next, [Node|Rest])),
+        Children),
+    append(Others, Children, NewList),
+    sort_list(NewList, Sorted),
+    search(Sorted, Goal, Path).
+
+% Sort paths based on heuristic
+sort_list(List, Sorted) :-
+    predsort(compare_paths, List, Sorted).
+
+compare_paths(Order, [A|_], [B|_]) :-
+    h(A, HA),
+    h(B, HB),
+    compare(Order, HA, HB).
