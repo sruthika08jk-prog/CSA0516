@@ -1,0 +1,26 @@
+
+% Facts
+parent(john, mary).
+parent(mary, sam).
+parent(sam, david).
+
+% Rules
+grandparent(X, Z) :-
+    parent(X, Y),
+    parent(Y, Z).
+
+ancestor(X, Y) :-
+    parent(X, Y).
+
+ancestor(X, Y) :-
+    parent(X, Z),
+    ancestor(Z, Y).
+
+% Forward chaining query
+start :-
+    (   grandparent(X, Y),
+        write(X), write(' is grandparent of '),
+        write(Y), nl,
+        fail
+    ;   true
+    ).
