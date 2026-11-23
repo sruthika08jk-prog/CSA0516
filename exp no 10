@@ -1,0 +1,40 @@
+
+def astar(graph, h, start, goal):
+    open_list = [(start, 0)]
+    came_from = {}
+    g = {start: 0}
+
+    while open_list:
+        open_list.sort(key=lambda x: x[1] + h[x[0]])
+        current, _ = open_list.pop(0)
+
+        if current == goal:
+            path = [current]
+            while current in came_from:
+                current = came_from[current]
+                path.append(current)
+            return path[::-1], g[goal]
+
+        for neighbor, cost in graph[current]:
+            new_cost = g[current] + cost
+            if neighbor not in g or new_cost < g[neighbor]:
+                g[neighbor] = new_cost
+                came_from[neighbor] = current
+                open_list.append((neighbor, new_cost))
+
+    return None, float('inf')
+
+
+graph = {
+    'A': [('B', 1), ('C', 4)],
+    'B': [('C', 2), ('D', 5)],
+    'C': [('D', 1)],
+    'D': []
+}
+
+h = {'A': 4, 'B': 3, 'C': 1, 'D': 0}
+
+path, cost = astar(graph, h, 'A', 'D')
+
+print("Shortest Path:", path)
+print("Total Cost:", cost)
