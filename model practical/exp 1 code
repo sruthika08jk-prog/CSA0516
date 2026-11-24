@@ -1,0 +1,42 @@
+import heapq
+
+def greedy_best_first_search(graph, heuristic, start, goal):
+    visited = set()
+    pq = [(heuristic[start], start)]
+    path = []
+
+    while pq:
+        h, node = heapq.heappop(pq)
+
+        if node in visited:
+            continue
+
+        visited.add(node)
+        path.append(node)
+
+        if node == goal:
+            print("Path:", path)
+            return
+
+        for neighbor, cost in graph[node]:
+            if neighbor not in visited:
+                heapq.heappush(pq, (heuristic[neighbor], neighbor))
+
+    print("Goal not found")
+
+graph = {
+    'A': [('B', 2), ('C', 4)],
+    'B': [('D', 3), ('E', 5)],
+    'C': [('F', 2)],
+    'D': [],
+    'E': [('G', 2)],
+    'F': [('G', 3)],
+    'G': []
+}
+
+heuristic = {
+    'A': 6, 'B': 4, 'C': 5,
+    'D': 3, 'E': 2, 'F': 1, 'G': 0
+}
+
+greedy_best_first_search(graph, heuristic, 'A', 'G')
