@@ -1,0 +1,63 @@
+
+% K-Means Clustering Algorithm in Prolog
+
+% Calculate Euclidean distance between two points
+distance(X1, Y1, X2, Y2, D) :-
+    D is sqrt((X1-X2)*(X1-X2) + (Y1-Y2)*(Y1-Y2)).
+
+% Find the nearest cluster center
+nearest_cluster(X, Y, Centers, Cluster) :-
+    findall(D-C,
+        (nth1(C, Centers, [CX,CY]),
+         distance(X,Y,CX,CY,D)),
+        Distances),
+    keysort(Distances, [_-Cluster|_]).
+
+% Assign points to clusters
+assign_points([], _, []).
+assign_points([[X,Y]|Points], Centers, [[X,Y,C]|Result]) :-
+    nearest_cluster(X,Y,Centers,C),
+    assign_points(Points,Centers,Result).
+
+% Calculate mean of a list
+mean(List, Mean) :-
+    sum_list(List, Sum),
+    length(List, N),
+    N > 0,
+    Mean is Sum / N.
+
+% Calculate new cluster centers
+new_center(Points, C, [MX,MY]) :-
+    findall(X, member([X,_,C],Points), Xs),
+    findall(Y, member([_,Y,C],Points), Ys),
+    (Xs = [] -> MX = 0 ; mean(Xs,MX)),
+    (Ys = [] -> MY = 0 ; mean(Ys,MY)).
+
+% Update all cluster centers
+update_centers(Points, OldCenters, NewCenters) :-
+    length(OldCenters,K),
+    numlist(1,K,Indices),
+    maplist(new_center(Points),Indices,NewCenters).
+
+% Perform K-Means clustering
+kmeans(Points, Centers, Result) :-
+    assign_points(Points,Centers,Assigned),
+    update_centers(Assigned,Centers,NewCenters),
+    (NewCenters = Centers ->
+        Result = Assigned
+    ;
+        kmeans(Points,NewCenters,Result)
+    ).
+
+% Sample data and execution
+main :-
+    Points = [[1,2],[2,1],[3,2],[8,8],[9,8],[8,9]],
+    InitialCenters = [[1,2],[8,8]],
+    kmeans(Points,InitialCenters,Result),
+    write('Clustered Data Points:'), nl,
+    print_clusters(Result).
+
+print_clusters([]).
+print_clusters([[X,Y,C]|T]) :-
+    format('Point (~w,~w) belongs to Cluster ~w~n',[X,Y,C]),
+    print_clusters(T).
